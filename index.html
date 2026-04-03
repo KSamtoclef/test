@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<!-- ============================================================
+  EDIT EVERYTHING HERE — No need to touch code below this block
+  ============================================================ -->
+<script>
+const CONFIG = {
+
+  /* --- PAGE META --- */
+  pageTitle: "🇳🇬 Nigeria Fuel Price Poll — Cast Your Vote",
+  pageUrl: "https://YOUR-SITE-URL.com",   // ← your deployed URL
+
+  /* --- PROFILE / HOST --- */
+  profileImage: "https://i.pravatar.cc/150?img=12",  // ← your photo URL or base64
+  profileName: "Chukwuemeka Adeyemi",
+  profileHandle: "@emeka_naija",
+  profileBio: "Activist | Concerned Nigerian | Fighting for affordable fuel for every Nigerian family",
+  profileVerified: true,
+
+  /* --- POLL QUESTION & OPTIONS --- */
+  pollQuestion: "Should the Nigerian government reduce fuel prices immediately?",
+  pollSubtitle: "Petrol is now above ₦1,200/litre. Millions of Nigerians are struggling. Your vote counts — make your voice heard today.",
+
+  urgencyText: "⚡ This poll closes in 48 hours — vote now before it's too late!",
+
+  options: [
+    { emoji: "📉", label: "YES — Reduce it now!", desc: "The price is too high, government must act immediately", color: "#16a34a" },
+    { emoji: "❌", label: "NO — Keep market price", desc: "Subsidy is unsustainable, let market forces decide", color: "#dc2626" },
+    { emoji: "🎯", label: "Target subsidy for the poor", desc: "Only low-income Nigerians should get cheaper fuel", color: "#d97706" },
+    { emoji: "🔍", label: "Investigate oil companies first", desc: "Corruption and cartels must be exposed before any fix", color: "#7c3aed" },
+  ],
+
+  /* --- VOTE COUNTS (seed numbers to show social proof) --- */
+  seedVotes: [48312, 6201, 14983, 9447],  // one per option above
+  seedShares: 22471,
+
+  /* --- SHARE GATE --- */
+  sharesRequired: 3,   // how many times they must tap share
+  shareMessage: "🇳🇬 IMPORTANT POLL: Should Nigeria reduce fuel prices NOW?\n\nMillions are struggling with ₦1,200/litre petrol. Cast your vote and see live results!\n\n👉 ",
+
+  /* --- MONETAG / FINAL PAGE --- */
+  monetagLink: "https://YOUR-MONETAG-LINK-HERE.com",  // ← your direct link
+  finalCTA: "See today's cheapest fuel stations near you →",
+  finalSubtitle: "Check live fuel prices across Nigeria before you hit the road",
+
+  /* --- COLORS / THEME --- */
+  bgColor: "#0b1523",
+  bgCard: "#111e35",
+  bgCardBorder: "#1e3256",
+  accentColor: "#22c55e",
+  accentText: "#ffffff",
+  headingColor: "#f0f6ff",
+  bodyColor: "#94a3c0",
+  dangerColor: "#ef4444",
+
+  /* --- BACKGROUND PATTERN (optional CSS) --- */
+  bgPattern: "radial-gradient(ellipse at 20% 0%, #16324a55 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, #1a1a4055 0%, transparent 60%)",
+};
+</script>
+<!-- ============================================================ -->
+
+<title id="metaTitle"></title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background-color:var(--bg);
+  background-image:var(--pattern);
+  color:var(--body);
+  min-height:100vh;
+}
+:root{
+  --bg:#0b1523;--card:#111e35;--border:#1e3256;
+  --accent:#22c55e;--heading:#f0f6ff;--body:#94a3c0;
+  --danger:#ef4444;--pattern:none;
+}
+.wrap{max-width:480px;margin:0 auto;padding:0 0 60px}
+.screen{display:none;animation:fadeUp .4s ease both}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* TOP BAR */
+.topbar{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.topbar-brand{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--heading)}
+.live-badge{display:flex;align-items:center;gap:6px;background:#ef444422;border:1px solid #ef444444;border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600;color:#f87171}
+.live-dot{width:7px;height:7px;background:#ef4444;border-radius:50%;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* PROFILE CARD */
+.profile-section{padding:24px 20px 0}
+.profile-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;gap:16px;align-items:flex-start;margin-bottom:16px}
+.avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);flex-shrink:0}
+.avatar-fallback{width:64px;height:64px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;flex-shrink:0}
+.profile-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--heading);display:flex;align-items:center;gap:6px}
+.verified{background:#1d9bf0;border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center}
+.verified svg{width:10px;height:10px;fill:white}
+.profile-handle{font-size:13px;color:var(--body);margin:2px 0 8px}
+.profile-bio{font-size:13px;color:var(--body);line-height:1.6}
+
+/* POLL SECTION */
+.poll-section{padding:0 20px}
+.urgency-bar{background:#ef444418;border:1px solid #ef444433;border-radius:10px;padding:10px 14px;font-size:13px;color:#f87171;font-weight:600;margin-bottom:16px;text-align:center}
+.poll-q{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--heading);line-height:1.25;margin-bottom:10px}
+.poll-sub{font-size:14px;color:var(--body);line-height:1.65;margin-bottom:6px}
+.vote-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--body);margin:12px 0 16px;padding:10px 14px;background:var(--card);border-radius:10px;border:1px solid var(--border)}
+.vote-meta strong{color:var(--heading)}
+
+.opt{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .2s;position:relative;overflow:hidden}
+.opt:hover{border-color:#2a4a7a}
+.opt.selected{border-color:var(--sel-color, var(--accent))}
+.opt.selected::before{content:'';position:absolute;inset:0;background:var(--sel-color, var(--accent));opacity:.07}
+.opt-emoji{font-size:26px;width:44px;text-align:center;flex-shrink:0}
+.opt-label{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--heading)}
+.opt-desc{font-size:12px;color:var(--body);margin-top:2px}
+.opt-check{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.opt.selected .opt-check{background:var(--sel-color,var(--accent));border-color:var(--sel-color,var(--accent))}
+.opt-votes-bar{position:absolute;bottom:0;left:0;height:3px;border-radius:0 0 0 14px;opacity:.5;transition:width 1s ease}
+
+.next-btn{width:100%;padding:17px;background:var(--accent);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px;transition:all .2s;letter-spacing:.2px}
+.next-btn:hover{filter:brightness(1.1)}
+.next-btn:disabled{background:#1e3050;color:#3a5080;cursor:default;filter:none}
+.disclaimer{text-align:center;font-size:11px;color:var(--body);margin-top:10px;opacity:.7}
+
+/* SHARE SCREEN */
+.share-section{padding:24px 20px}
+.share-header{text-align:center;margin-bottom:24px}
+.share-icon-big{width:72px;height:72px;background:#25a24422;border:2px solid #25a24455;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.share-h{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--heading);margin-bottom:8px}
+.share-sub{font-size:14px;color:var(--body);line-height:1.65}
+
+.share-progress{display:flex;gap:8px;margin:20px 0;justify-content:center}
+.share-pip{width:48px;height:8px;border-radius:4px;background:var(--border);transition:background .4s}
+.share-pip.done{background:#25a244}
+
+.share-count-display{text-align:center;margin:8px 0 20px}
+.share-count-num{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:#25a244}
+.share-count-label{font-size:13px;color:var(--body)}
+.share-count-needed{font-size:13px;color:#f59e0b;font-weight:600;margin-top:4px}
+
+.wa-share-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:17px;background:#25a244;color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none}
+.wa-share-btn:hover{background:#1d8a38}
+.wa-share-btn:active{transform:scale(.98)}
+
+.share-warning{background:#f59e0b18;border:1px solid #f59e0b44;border-radius:10px;padding:12px 16px;font-size:13px;color:#fbbf24;margin:14px 0;display:none}
+.share-warning.show{display:block}
+
+.submit-btn{width:100%;padding:17px;background:var(--accent);color:#fff;border:none;border-radius:13px;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px;transition:all .2s;display:none}
+.submit-btn.show{display:block}
+.submit-btn:hover{filter:brightness(1.1)}
+
+/* RESULTS SCREEN */
+.results-section{padding:24px 20px}
+.result-hero{text-align:center;margin-bottom:24px}
+.confetti-row{font-size:28px;margin-bottom:12px}
+.results-h{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--heading);margin-bottom:6px}
+.results-sub{font-size:13px;color:var(--body);line-height:1.6}
+
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--heading)}
+.stat-label{font-size:11px;color:var(--body);margin-top:3px}
+
+.result-bar-item{margin-bottom:18px}
+.result-bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.result-bar-label{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--heading)}
+.result-bar-pct{font-family:'Syne',sans-serif;font-size:18px;font-weight:800}
+.result-bar-votes{font-size:12px;color:var(--body);margin-bottom:5px}
+.bar-track{background:var(--border);border-radius:6px;height:10px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;transition:width 1.4s cubic-bezier(.4,0,.2,1);width:0}
+
+.winner-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:8px;background:#22c55e22;color:#4ade80;border:1px solid #22c55e44}
+
+.monetag-section{margin-top:28px;background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:22px;text-align:center}
+.monetag-label{font-size:12px;color:var(--body);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.monetag-btn{display:block;width:100%;padding:16px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;margin-bottom:12px}
+.monetag-btn:hover{filter:brightness(1.1)}
+.wa-again-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:transparent;color:#25a244;border:1.5px solid #25a24455;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s}
+.wa-again-btn:hover{background:#25a24415}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ===================== SCREEN 1: VOTE ===================== -->
+  <div class="screen active" id="s1">
+    <div class="topbar">
+      <div class="topbar-brand">🇳🇬 NaijaVoice Poll</div>
+      <div class="live-badge"><div class="live-dot"></div> LIVE</div>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-card">
+        <img class="avatar" id="profileImg" src="" alt="profile" onerror="this.style.display='none';document.getElementById('avatarFallback').style.display='flex'"/>
+        <div class="avatar-fallback" id="avatarFallback" style="display:none" id="avatarFallback"></div>
+        <div>
+          <div class="profile-name" id="profileName">
+            <span id="profileNameText"></span>
+            <span class="verified" id="verifiedBadge" style="display:none">
+              <svg viewBox="0 0 10 10"><path d="M5 0L6.2 3.8H10L7 6.2 8.1 10 5 7.6 1.9 10 3 6.2 0 3.8h3.8z"/></svg>
+            </span>
+          </div>
+          <div class="profile-handle" id="profileHandle"></div>
+          <div class="profile-bio" id="profileBio"></div>
+        </div>
+      </div>
+
+      <div class="urgency-bar" id="urgencyBar"></div>
+    </div>
+
+    <div class="poll-section">
+      <div class="poll-q" id="pollQ"></div>
+      <div class="poll-sub" id="pollSub"></div>
+      <div class="vote-meta">
+        <span><strong id="totalVotesDisplay">0</strong> votes cast</span>
+        <span><strong id="sharesDisplay">0</strong> shares</span>
+        <span>Updated live</span>
+      </div>
+
+      <div id="optionsList"></div>
+
+      <button class="next-btn" id="nextBtn" disabled onclick="goToShare()">Proceed to Submit Your Vote →</button>
+      <p class="disclaimer">Anonymous poll · No personal data collected · Share to spread awareness</p>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN 2: SHARE GATE ===================== -->
+  <div class="screen" id="s2">
+    <div class="share-section">
+      <div class="share-header">
+        <div class="share-icon-big">
+          <svg width="36" height="36" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#25a244"/><path d="M23.5 8.5C21.6 6.6 19.1 5.5 16.4 5.5c-5.5 0-9.9 4.5-9.9 9.9 0 1.7.5 3.4 1.3 4.9L6.5 26l5.9-1.5c1.4.8 3 1.2 4.7 1.2 5.5 0 9.9-4.5 9.9-9.9 0-2.6-1-5.1-2.9-6.8l-.6-.5zM16.4 23.9c-1.5 0-3-.4-4.3-1.1l-.3-.2-3.1.8.8-3-.2-.3c-.8-1.3-1.2-2.8-1.2-4.3 0-4.6 3.7-8.3 8.3-8.3 2.2 0 4.3.9 5.9 2.4 1.6 1.6 2.4 3.7 2.4 5.9 0 4.7-3.7 8.3-8.3 8.1zm4.6-6.2c-.3-.1-1.6-.8-1.8-.9-.3-.1-.5-.1-.6.1-.2.2-.7.9-.8 1.1-.1.2-.3.2-.5.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5c.1-.2.2-.3.2-.5v-.5c0-.2-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.2 5 4.4.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.1-1.4-.1-.1-.3-.2-.6-.3z" fill="white"/></svg>
+        </div>
+        <div class="share-h">Submit Your Vote</div>
+        <div class="share-sub">Your vote is ready — but to make it count, you must share this poll to at least <strong id="requiredSharesText" style="color:#fbbf24"></strong> WhatsApp groups so more Nigerians can vote. Spread the news!</div>
+      </div>
+
+      <div class="share-progress" id="sharePips"></div>
+      <div class="share-count-display">
+        <div class="share-count-num" id="shareCountNum">0</div>
+        <div class="share-count-label">of <span id="requiredSharesLabel"></span> shares done</div>
+        <div class="share-count-needed" id="shareNeededMsg"></div>
+      </div>
+
+      <button class="wa-share-btn" onclick="doShare()">
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path d="M23.5 8.5C21.6 6.6 19.1 5.5 16.4 5.5c-5.5 0-9.9 4.5-9.9 9.9 0 1.7.5 3.4 1.3 4.9L6.5 26l5.9-1.5c1.4.8 3 1.2 4.7 1.2 5.5 0 9.9-4.5 9.9-9.9 0-2.6-1-5.1-2.9-6.8l-.6-.5zM16.4 23.9c-1.5 0-3-.4-4.3-1.1l-.3-.2-3.1.8.8-3-.2-.3c-.8-1.3-1.2-2.8-1.2-4.3 0-4.6 3.7-8.3 8.3-8.3 2.2 0 4.3.9 5.9 2.4 1.6 1.6 2.4 3.7 2.4 5.9 0 4.7-3.7 8.3-8.3 8.1zm4.6-6.2c-.3-.1-1.6-.8-1.8-.9-.3-.1-.5-.1-.6.1-.2.2-.7.9-.8 1.1-.1.2-.3.2-.5.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5c.1-.2.2-.3.2-.5v-.5c0-.2-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.2 5 4.4.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.1-1.4-.1-.1-.3-.2-.6-.3z" fill="white"/></svg>
+        <span id="shareButtonText">Share to WhatsApp Group</span>
+      </button>
+
+      <div class="share-warning" id="shareWarning">
+        ⚠️ You need to share to <strong id="warnLeft"></strong> more group(s) before you can submit. Please tap the button above and send to a WhatsApp group.
+      </div>
+
+      <button class="submit-btn" id="submitBtn" onclick="goToResults()">
+        ✅ Submit My Vote &amp; See Results
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN 3: RESULTS ===================== -->
+  <div class="screen" id="s3">
+    <div class="results-section">
+      <div class="result-hero">
+        <div class="confetti-row">🎉🇳🇬🔥</div>
+        <div class="results-h">Vote Submitted! Live Results</div>
+        <div class="results-sub" id="resultsSub"></div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-num" id="rTotalVotes">0</div><div class="stat-label">Total Votes</div></div>
+        <div class="stat-box"><div class="stat-num" id="rTotalShares">0</div><div class="stat-label">Shares</div></div>
+        <div class="stat-box"><div class="stat-num" id="rLeading">—</div><div class="stat-label">Leading</div></div>
+      </div>
+
+      <div id="resultsBars"></div>
+
+      <div class="monetag-section">
+        <div class="monetag-label" id="monetagLabel"></div>
+        <a class="monetag-btn" id="monetagBtn" href="#" target="_blank"></a>
+        <a class="wa-again-btn" onclick="doShare()">
+          <svg width="18" height="18" viewBox="0 0 32 32" fill="none"><path d="M23.5 8.5C21.6 6.6 19.1 5.5 16.4 5.5c-5.5 0-9.9 4.5-9.9 9.9 0 1.7.5 3.4 1.3 4.9L6.5 26l5.9-1.5c1.4.8 3 1.2 4.7 1.2 5.5 0 9.9-4.5 9.9-9.9 0-2.6-1-5.1-2.9-6.8l-.6-.5zM16.4 23.9c-1.5 0-3-.4-4.3-1.1l-.3-.2-3.1.8.8-3-.2-.3c-.8-1.3-1.2-2.8-1.2-4.3 0-4.6 3.7-8.3 8.3-8.3 2.2 0 4.3.9 5.9 2.4 1.6 1.6 2.4 3.7 2.4 5.9 0 4.7-3.7 8.3-8.3 8.1zm4.6-6.2c-.3-.1-1.6-.8-1.8-.9-.3-.1-.5-.1-.6.1-.2.2-.7.9-.8 1.1-.1.2-.3.2-.5.1-.3-.1-1.2-.4-2.3-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5c.1-.2.2-.3.2-.5v-.5c0-.2-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.2 5 4.4.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.1-1.4-.1-.1-.3-.2-.6-.3z" fill="white"/></svg>
+          Share Again &amp; Get More Votes
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ─── Apply CONFIG ──────────────────────────────────────────────
+document.title = CONFIG.pageTitle;
+document.documentElement.style.setProperty('--bg', CONFIG.bgColor);
+document.documentElement.style.setProperty('--card', CONFIG.bgCard);
+document.documentElement.style.setProperty('--border', CONFIG.bgCardBorder);
+document.documentElement.style.setProperty('--accent', CONFIG.accentColor);
+document.documentElement.style.setProperty('--heading', CONFIG.headingColor);
+document.documentElement.style.setProperty('--body', CONFIG.bodyColor);
+document.documentElement.style.setProperty('--danger', CONFIG.dangerColor);
+document.documentElement.style.setProperty('--pattern', CONFIG.bgPattern);
+document.body.style.backgroundColor = CONFIG.bgColor;
+document.body.style.backgroundImage = CONFIG.bgPattern;
+
+// Profile
+const img = document.getElementById('profileImg');
+img.src = CONFIG.profileImage;
+const fallback = document.getElementById('avatarFallback');
+fallback.textContent = CONFIG.profileName.charAt(0).toUpperCase();
+document.getElementById('profileNameText').textContent = CONFIG.profileName;
+document.getElementById('profileHandle').textContent = CONFIG.profileHandle;
+document.getElementById('profileBio').textContent = CONFIG.profileBio;
+if (CONFIG.profileVerified) document.getElementById('verifiedBadge').style.display = 'inline-flex';
+
+document.getElementById('urgencyBar').textContent = CONFIG.urgencyText;
+document.getElementById('pollQ').textContent = CONFIG.pollQuestion;
+document.getElementById('pollSub').textContent = CONFIG.pollSubtitle;
+document.getElementById('requiredSharesText').textContent = CONFIG.sharesRequired;
+document.getElementById('requiredSharesLabel').textContent = CONFIG.sharesRequired;
+document.getElementById('monetagLabel').textContent = CONFIG.finalSubtitle;
+document.getElementById('monetagBtn').textContent = CONFIG.finalCTA;
+document.getElementById('monetagBtn').href = CONFIG.monetagLink;
+document.getElementById('resultsSub').textContent = 'Your voice has been counted. Here is how Nigerians voted on the fuel crisis.';
+
+// ─── Vote State ─────────────────────────────────────────────────
+let votes = [...CONFIG.seedVotes];
+let totalShares = CONFIG.seedShares;
+let selected = null;
+let sharesDone = 0;
+const required = CONFIG.sharesRequired;
+
+// Simulate live vote trickle
+function trickleVotes() {
+  const i = Math.floor(Math.random() * votes.length);
+  votes[i] += Math.floor(Math.random() * 3) + 1;
+  totalShares += Math.random() > 0.7 ? 1 : 0;
+  updateVoteMeta();
+}
+setInterval(trickleVotes, 3500);
+
+function totalVotes() { return votes.reduce((a,b)=>a+b,0); }
+
+function updateVoteMeta() {
+  document.getElementById('totalVotesDisplay').textContent = totalVotes().toLocaleString();
+  document.getElementById('sharesDisplay').textContent = totalShares.toLocaleString();
+}
+updateVoteMeta();
+
+// ─── Build options ───────────────────────────────────────────────
+const list = document.getElementById('optionsList');
+CONFIG.options.forEach((opt, i) => {
+  const d = document.createElement('div');
+  d.className = 'opt';
+  d.id = 'opt' + i;
+  d.style.setProperty('--sel-color', opt.color);
+  d.innerHTML = `
+    <div class="opt-emoji">${opt.emoji}</div>
+    <div style="flex:1">
+      <div class="opt-label">${opt.label}</div>
+      <div class="opt-desc">${opt.desc}</div>
+    </div>
+    <div class="opt-check" id="chk${i}">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="opt-votes-bar" id="bar${i}" style="background:${opt.color}"></div>
+  `;
+  d.onclick = () => selectOpt(i);
+  list.appendChild(d);
+
+  // Show vote bars as % of total
+  const pct = Math.round((votes[i] / totalVotes()) * 100);
+  document.getElementById('bar' + i).style.width = pct + '%';
+});
+
+function selectOpt(i) {
+  selected = i;
+  CONFIG.options.forEach((_, j) => {
+    document.getElementById('opt' + j).classList.toggle('selected', j === i);
+  });
+  document.getElementById('nextBtn').disabled = false;
+}
+
+// ─── Screen transitions ─────────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goToShare() {
+  if (selected === null) return;
+  votes[selected]++;
+  updateVoteMeta();
+  buildSharePips();
+  updateShareUI();
+  show('s2');
+}
+
+// ─── Share pips ─────────────────────────────────────────────────
+function buildSharePips() {
+  const c = document.getElementById('sharePips');
+  c.innerHTML = '';
+  for (let i = 0; i < required; i++) {
+    const p = document.createElement('div');
+    p.className = 'share-pip';
+    p.id = 'pip' + i;
+    c.appendChild(p);
+  }
+}
+
+function updateShareUI() {
+  document.getElementById('shareCountNum').textContent = sharesDone;
+  for (let i = 0; i < required; i++) {
+    const pip = document.getElementById('pip' + i);
+    if (pip) pip.classList.toggle('done', i < sharesDone);
+  }
+  const left = required - sharesDone;
+  if (left > 0) {
+    document.getElementById('shareNeededMsg').textContent = `⚡ ${left} more share${left > 1 ? 's' : ''} needed to submit!`;
+    document.getElementById('shareWarning').classList.remove('show');
+    document.getElementById('submitBtn').classList.remove('show');
+    document.getElementById('shareButtonText').textContent = sharesDone === 0
+      ? 'Share to WhatsApp Group'
+      : `Share Again (${sharesDone}/${required} done)`;
+  } else {
+    document.getElementById('shareNeededMsg').textContent = '✅ All shares done! Submit below.';
+    document.getElementById('submitBtn').classList.add('show');
+    document.getElementById('shareButtonText').textContent = 'Share Again';
+  }
+}
+
+// ─── WhatsApp share (works on mobile & desktop) ─────────────────
+function doShare() {
+  const text = CONFIG.shareMessage + CONFIG.pageUrl;
+  const waUrl = 'https://wa.me/?text=' + encodeURIComponent(text);
+
+  // Try navigator.share first (native mobile share sheet)
+  if (navigator.share) {
+    navigator.share({
+      title: CONFIG.pageTitle,
+      text: CONFIG.shareMessage,
+      url: CONFIG.pageUrl
+    }).then(() => {
+      countShare();
+    }).catch(() => {
+      // User cancelled or failed — open wa.me fallback
+      window.open(waUrl, '_blank');
+      setTimeout(countShare, 1500);
+    });
+  } else {
+    window.open(waUrl, '_blank');
+    setTimeout(countShare, 1500);
+  }
+}
+
+function countShare() {
+  if (sharesDone < required) {
+    sharesDone++;
+    totalShares++;
+    updateVoteMeta();
+  }
+  updateShareUI();
+}
+
+function goToResults() {
+  if (sharesDone < required) {
+    document.getElementById('shareWarning').classList.add('show');
+    document.getElementById('warnLeft').textContent = required - sharesDone;
+    return;
+  }
+  buildResults();
+  show('s3');
+}
+
+// ─── Results ────────────────────────────────────────────────────
+function buildResults() {
+  const total = totalVotes();
+  animCount(document.getElementById('rTotalVotes'), total, 1200);
+  animCount(document.getElementById('rTotalShares'), totalShares, 1100);
+
+  const maxI = votes.indexOf(Math.max(...votes));
+  const shortLabels = ['YES', 'NO', 'Target', 'Investigate'];
+  document.getElementById('rLeading').textContent = shortLabels[maxI] || CONFIG.options[maxI].emoji;
+
+  const bars = document.getElementById('resultsBars');
+  bars.innerHTML = '';
+  CONFIG.options.forEach((opt, i) => {
+    const pct = Math.round((votes[i] / total) * 100);
+    const isWinner = i === maxI;
+    bars.innerHTML += `
+      <div class="result-bar-item">
+        <div class="result-bar-top">
+          <span class="result-bar-label">${opt.emoji} ${opt.label}${isWinner ? '<span class="winner-badge">LEADING</span>' : ''}</span>
+          <span class="result-bar-pct" style="color:${opt.color}">${pct}%</span>
+        </div>
+        <div class="result-bar-votes">${votes[i].toLocaleString()} votes</div>
+        <div class="bar-track"><div class="bar-fill" id="rb${i}" style="background:${opt.color}"></div></div>
+      </div>`;
+  });
+  setTimeout(() => {
+    CONFIG.options.forEach((_, i) => {
+      const pct = Math.round((votes[i] / total) * 100);
+      const el = document.getElementById('rb' + i);
+      if (el) el.style.width = pct + '%';
+    });
+  }, 100);
+}
+
+function animCount(el, target, dur) {
+  let start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / dur, 1);
+    el.textContent = Math.round(p * target).toLocaleString();
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+</script>
+</body>
+</html>
